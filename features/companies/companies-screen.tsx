@@ -2,6 +2,7 @@
 
 import { CompaniesTable } from "./companies-table";
 import { CompaniesToolbar } from "./companies-toolbar";
+import { CompanyDrawer } from "./company-drawer";
 import { useCompaniesUrlState } from "./use-companies-url-state";
 import { NEW_COMPANY } from "./url-state";
 
@@ -28,6 +29,16 @@ export function CompaniesScreen() {
         onPageChange={(page) => updateUrl({ page })}
         onClearFilters={() => updateUrl({ q: "", status: null, page: 1 })}
       />
+
+      {state.company && (
+        <CompanyDrawer
+          target={state.company}
+          onClose={() => updateUrl({ company: null })}
+          onCreated={(company) =>
+            updateUrl({ company: company.id }, "replace")
+          }
+        />
+      )}
     </>
   );
 }

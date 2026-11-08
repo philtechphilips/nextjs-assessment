@@ -250,4 +250,36 @@ describe("companies list", () => {
 
     await waitFor(() => expect(onUnauthorized).toHaveBeenCalled());
   });
+
+  it("opens the drawer from a row and reflects it in the URL", async () => {
+    serveCompanies();
+    server.use(
+      http.get("*/api/v1/companies/:id", () => HttpResponse.json(ACME)),
+    );
+    const user = userEvent.setup();
+    renderWithProviders(<CompaniesScreen />);
+
+    await user.click(await screen.findByRole("link", { name: "Acme" }));
+
+    expect(await screen.findByRole("dialog")).toBeVisible();
+    expect(await screen.findByLabelText("Name")).toHaveValue("Acme");
+    expect(window.location.search).toBe("?company=acme");
+
+    await user.click(screen.getByRole("button", { name: "Close" }));
+
+    expect(screen.queryByRole("dialog")).toBeNull();
+    expect(window.location.search).toBe("");
+  });
+
+  it("opens the drawer directly from a shared link", async () => {
+    window.history.replaceState(null, "", "/companies?company=acme");
+    serveCompanies();
+    server.use(
+      http.get("*/api/v1/companies/:id", () => HttpResponse.json(ACME)),
+    );
+    renderWithProviders(<CompaniesScreen />);
+
+    expect(await screen.findByRole("dialog")).toBeVisible();
+    expect(await screen.findByLabelText("Name")).toHaveValue("Acme");
+  });
 });
