@@ -1,0 +1,16 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    @apply bg-white text-slate-900;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-blue-600;
+  }
+}
+
+/* A modal <dialog> makes the page inert but does not stop it from scrolling. */
+html:has(dialog[open]) {
+  overflow: hidden;
+}
