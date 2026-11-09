@@ -34,9 +34,9 @@ export function Drawer({ labelledBy, onClose, children }: DrawerProps) {
       ref={dialogRef}
       aria-labelledby={labelledBy}
       onClose={handleNativeClose}
-      className="fixed inset-y-0 right-0 left-auto m-0 h-dvh max-h-none w-full max-w-md bg-white shadow-xl backdrop:bg-slate-900/40"
+      className="fixed inset-y-0 right-0 left-auto m-0 h-dvh max-h-none w-full max-w-md border-l border-slate-200 bg-white shadow-2xl backdrop:bg-slate-900/40 motion-safe:animate-drawer-in motion-safe:backdrop:animate-fade-in"
     >
-      <div className="h-full overflow-y-auto p-6">{children}</div>
+      <div className="h-full overflow-y-auto">{children}</div>
     </dialog>
   );
 }

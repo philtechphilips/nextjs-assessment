@@ -9,7 +9,11 @@ export function LanguageToggle() {
   const { locale, t } = useI18n();
 
   return (
-    <div role="group" aria-label={t("language.label")} className="flex gap-1">
+    <div
+      role="group"
+      aria-label={t("language.label")}
+      className="inline-flex gap-0.5 rounded-lg bg-slate-100 p-0.5"
+    >
       {LOCALES.map((option) => (
         <button
           key={option}
@@ -17,7 +21,7 @@ export function LanguageToggle() {
           lang={option}
           aria-pressed={option === locale}
           onClick={() => startTransition(() => setLocale(option))}
-          className="rounded px-2 py-1 text-sm font-medium text-slate-600 hover:bg-slate-100 aria-pressed:bg-slate-900 aria-pressed:text-white"
+          className="rounded-md px-2.5 py-1 text-xs font-semibold text-slate-600 transition-colors hover:text-slate-900 aria-pressed:bg-white aria-pressed:text-slate-900 aria-pressed:shadow-xs"
         >
           {option.toUpperCase()}
         </button>

@@ -41,9 +41,6 @@ type CompanyFormProps = {
   alertRef?: Ref<HTMLDivElement>;
 };
 
-const CONTROL_CLASS =
-  "w-full rounded border border-slate-300 px-3 py-1.5 aria-invalid:border-red-600";
-
 export function CompanyForm({
   draft,
   onChange,
@@ -95,15 +92,20 @@ export function CompanyForm({
       onSubmit={handleSubmit}
       className="flex flex-col gap-4"
     >
-      {/* Stays mounted: live regions only announce changes to their content. */}
+      {/* Stays mounted, and in the a11y tree when empty (out of flow, not
+          hidden): live regions only announce changes to their content. */}
       <div
         ref={alertRef}
         role="alert"
         tabIndex={-1}
-        className="outline-none empty:hidden"
+        className="flex flex-col gap-2 outline-none empty:absolute"
       >
         {banner}
-        {formMessage && <p className="text-red-700">{formMessage}</p>}
+        {formMessage && (
+          <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">
+            {formMessage}
+          </p>
+        )}
       </div>
 
       <Field
@@ -116,7 +118,7 @@ export function CompanyForm({
             required
             value={draft.name}
             onChange={(event) => onChange("name", event.target.value)}
-            className={CONTROL_CLASS}
+            className="control"
           />
         )}
       />
@@ -130,7 +132,7 @@ export function CompanyForm({
             {...controlProps}
             value={draft.domain}
             onChange={(event) => onChange("domain", event.target.value)}
-            className={CONTROL_CLASS}
+            className="control"
           />
         )}
       />
@@ -146,7 +148,7 @@ export function CompanyForm({
             onChange={({ target: { value } }) => {
               if (isCompanyStatus(value)) onChange("status", value);
             }}
-            className={CONTROL_CLASS}
+            className="control control-select"
           >
             {COMPANY_STATUSES.map((status) => (
               <option key={status} value={status}>
@@ -161,7 +163,7 @@ export function CompanyForm({
         type="submit"
         variant="primary"
         isInactive={isSubmitting || isSubmitBlocked}
-        className="self-start"
+        className="mt-2 w-full"
       >
         {isSubmitting ? t("form.saving") : submitLabel}
       </Button>
@@ -191,8 +193,8 @@ function Field({ label, error, hint, render }: FieldProps) {
     .join(" ");
 
   return (
-    <div className="flex flex-col gap-1">
-      <label htmlFor={id} className="text-sm font-medium">
+    <div className="flex flex-col gap-1.5">
+      <label htmlFor={id} className="text-sm font-medium text-slate-700">
         {label}
       </label>
       {render({

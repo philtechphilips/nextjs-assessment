@@ -1,8 +1,9 @@
 "use client";
 
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useRef, useState } from "react";
+import { useRef, useState, type ReactNode } from "react";
 import { Button } from "@/components/button";
+import { AlertIcon } from "@/components/icons";
 import { RetryableError } from "@/components/retryable-error";
 import { getCompanyOptions } from "@/lib/api/companies";
 import { isApiStatus } from "@/lib/api/http";
@@ -37,7 +38,14 @@ export function EditCompanyPanel({ id, onNotice }: EditCompanyPanelProps) {
     return <DrawerSkeleton label={t("drawer.loading")} />;
   }
   if (isApiStatus(query.error, 404)) {
-    return <p role="alert">{t("drawer.notFound")}</p>;
+    return (
+      <p
+        role="alert"
+        className="rounded-lg bg-slate-50 p-4 text-center text-sm text-slate-700"
+      >
+        {t("drawer.notFound")}
+      </p>
+    );
   }
   return (
     <RetryableError
@@ -54,10 +62,13 @@ function DrawerSkeleton({ label }: { label: string }) {
       <p role="status" className="text-sm text-slate-600">
         {label}
       </p>
-      <div
-        aria-hidden
-        className="h-32 animate-pulse rounded bg-slate-100 motion-reduce:animate-none"
-      />
+      {[0, 1, 2].map((block) => (
+        <div
+          key={block}
+          aria-hidden
+          className="h-16 animate-pulse rounded-lg bg-slate-100 motion-reduce:animate-none"
+        />
+      ))}
     </div>
   );
 }
@@ -157,13 +168,14 @@ function EditCompanyForm({ company, onNotice }: EditCompanyFormProps) {
 
   return (
     <div className="flex flex-col gap-6">
-      <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 text-sm">
-        <dt className="text-slate-600">{t("detail.created")}</dt>
-        <dd>{formatDate(base.created_at)}</dd>
-        <dt className="text-slate-600">{t("detail.updated")}</dt>
-        <dd>{formatDate(base.updated_at)}</dd>
-        <dt className="text-slate-600">{t("detail.version")}</dt>
-        <dd>{base.version}</dd>
+      <dl className="grid grid-cols-3 gap-3 rounded-lg bg-slate-50 p-4">
+        <Detail label={t("detail.created")}>
+          {formatDate(base.created_at)}
+        </Detail>
+        <Detail label={t("detail.updated")}>
+          {formatDate(base.updated_at)}
+        </Detail>
+        <Detail label={t("detail.version")}>{base.version}</Detail>
       </dl>
 
       <CompanyForm
@@ -192,6 +204,17 @@ function EditCompanyForm({ company, onNotice }: EditCompanyFormProps) {
   );
 }
 
+function Detail({ label, children }: { label: string; children: ReactNode }) {
+  return (
+    <div>
+      <dt className="text-xs text-slate-600">{label}</dt>
+      <dd className="mt-0.5 text-sm font-medium text-slate-900 tabular-nums">
+        {children}
+      </dd>
+    </div>
+  );
+}
+
 const CONFLICT_MESSAGES = {
   detected: "conflict.detected",
   loading: "conflict.detected",
@@ -211,13 +234,16 @@ function ConflictBanner({
 
   const isLoading = phase === "loading";
   return (
-    <div className="flex flex-col items-start gap-2 rounded border border-amber-400 bg-amber-50 p-3 text-sm">
-      <p>{t(CONFLICT_MESSAGES[phase])}</p>
-      {phase !== "reloaded" && (
-        <Button isInactive={isLoading} onClick={onLoadLatest}>
-          {t(isLoading ? "conflict.loading" : "conflict.load")}
-        </Button>
-      )}
+    <div className="flex gap-3 rounded-lg border border-amber-300 bg-amber-50 p-3 text-sm text-amber-950">
+      <AlertIcon className="mt-0.5 size-4 text-amber-600" />
+      <div className="flex flex-col items-start gap-2">
+        <p>{t(CONFLICT_MESSAGES[phase])}</p>
+        {phase !== "reloaded" && (
+          <Button size="sm" isInactive={isLoading} onClick={onLoadLatest}>
+            {t(isLoading ? "conflict.loading" : "conflict.load")}
+          </Button>
+        )}
+      </div>
     </div>
   );
 }

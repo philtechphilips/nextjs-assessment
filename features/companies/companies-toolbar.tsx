@@ -2,6 +2,7 @@
 
 import { useId } from "react";
 import { Button } from "@/components/button";
+import { PlusIcon } from "@/components/icons";
 import { COMPANY_STATUSES, type CompanyStatus } from "@/lib/api/schema";
 import { useI18n } from "@/lib/i18n/i18n-provider";
 import { SearchBox } from "./search-box";
@@ -26,10 +27,10 @@ export function CompaniesToolbar({
   const statusId = useId();
 
   return (
-    <div className="mb-4 flex flex-wrap items-end gap-3">
+    <div className="flex flex-wrap items-center gap-3 border-b border-slate-200 p-4">
       <SearchBox label={t("toolbar.search")} value={q} onChange={onSearch} />
-      <div className="flex flex-col gap-1">
-        <label htmlFor={statusId} className="text-sm font-medium">
+      <div className="w-full sm:w-44">
+        <label htmlFor={statusId} className="sr-only">
           {t("toolbar.status")}
         </label>
         <select
@@ -38,7 +39,7 @@ export function CompaniesToolbar({
           onChange={({ target: { value } }) =>
             onStatusChange(isCompanyStatus(value) ? value : null)
           }
-          className="rounded border border-slate-300 px-3 py-1.5"
+          className="control control-select"
         >
           <option value="">{t("toolbar.allStatuses")}</option>
           {COMPANY_STATUSES.map((option) => (
@@ -48,7 +49,8 @@ export function CompaniesToolbar({
           ))}
         </select>
       </div>
-      <Button variant="primary" onClick={onCreate}>
+      <Button variant="primary" onClick={onCreate} className="w-full sm:w-auto">
+        <PlusIcon />
         {t("toolbar.new")}
       </Button>
     </div>

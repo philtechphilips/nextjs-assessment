@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
+import { SearchIcon } from "@/components/icons";
 
 const DEBOUNCE_MS = 300;
 
@@ -33,16 +34,20 @@ export function SearchBox({ label, value, onChange }: SearchBoxProps) {
   }
 
   return (
-    <div className="flex grow flex-col gap-1">
-      <label htmlFor={id} className="text-sm font-medium">
+    <div className="relative min-w-56 grow basis-64">
+      <label htmlFor={id} className="sr-only">
         {label}
       </label>
+      <span className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-slate-500">
+        <SearchIcon />
+      </span>
       <input
         id={id}
         type="search"
+        placeholder={label}
         value={text}
         onChange={(event) => handleChange(event.target.value)}
-        className="w-full rounded border border-slate-300 px-3 py-1.5"
+        className="control pl-9"
       />
     </div>
   );

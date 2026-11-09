@@ -6,7 +6,9 @@ export default async function CompaniesPage() {
 
   return (
     <>
-      <h1 className="mb-6 text-2xl font-semibold">{t("companies.title")}</h1>
+      <h1 className="mb-6 text-2xl font-semibold tracking-tight">
+        {t("companies.title")}
+      </h1>
       <CompaniesScreen />
     </>
   );

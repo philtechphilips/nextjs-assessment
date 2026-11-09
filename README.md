@@ -32,7 +32,7 @@ The data lives in memory and resets when the server restarts.
 ```
 app/                  Routes. Server Components by default, plus the API route handlers
 features/companies/   The feature: URL state, table, drawer, forms
-components/           Generic UI: Button, Drawer, RetryableError
+components/           Generic UI: Button, Drawer, RetryableError, icons
 lib/api/              Typed client: schema.ts stands in for generated code
 lib/auth/             Fake session, safe returnTo
 lib/i18n/             Locale cookie, dictionaries, translator
@@ -91,7 +91,7 @@ On a 409 the draft is kept and saving is blocked until the user loads the latest
 - **Sign-out.** Not requested. Clear the token in the console to test it.
 - **`loading.tsx`.** The page awaits no server data, so it would never be seen. `app/companies/error.tsx` exists only for render errors; query errors are handled inline.
 - **Domain format validation.** The API has no such rule, and the client mirrors the API.
-- **Pixel-level polish** and a design system.
+- **A design system and dark mode.** Tailwind utilities and two shared control classes are enough here.
 
 ## Known edge cases I did not handle
 
